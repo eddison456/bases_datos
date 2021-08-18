@@ -1,8 +1,32 @@
 
-const {validationResult} = require("express-validator");
+const {validationResult, body} = require("express-validator");
+const Evento = require("../model/reuniones")
+
+ async  function addevento(req,res){
+    console.log("entre a function", req.body)
+
+   try{
+      const {id ,nombreEvento , cantidad }=req.body
+
+      debugger
+   const model = new Evento({
+      id: id,
+      nombreEvento: nombreEvento,
+      cantidad:cantidad
+   })
+
+   const proEvento = await model.save();
+
+   console.log("Res" , proEvento)
+
+   }catch{
+      console.log("error <");
+   }
+   
+ }
 
 
-exports.even = (req,res,next) =>{
+ exports.evento =   (req,res,next) =>{
    const errors = validationResult(req);
    console.log("entre")
    if(!errors.isEmpty()){
@@ -14,12 +38,12 @@ exports.even = (req,res,next) =>{
            }
    
     try{
-       const valueOne = +req.body.valueOne;
-       const valueTwo = +req.body.valueTwo;
-    
-       console.log("resultado :","resultado : ", valueOne ,valueTwo)
-       const resultado = valueOne+valueTwo;
-       res.status(201).json({messege:"resultado." ,data :{ resultado }});
+      
+       const itf = req.body.id;
+
+        addevento(req,res)
+
+       res.status(201).json({messege:"resultado." ,data :{itf}});
        
    
     }catch(e){
@@ -31,3 +55,100 @@ exports.even = (req,res,next) =>{
     
    };
 
+
+   exports.getEvento = async (req,res,next)=>{
+      const  errors=validationResult(req);
+
+      if(!errors.isEmpty()){
+         error.statusCode=422;
+         error.data=errors.array();
+         throw error;
+      }
+
+      try{
+         
+         const arrayEventos= await Evento.find()
+
+         res.status(201).json({messege:arrayEventos});
+         console.log(arrayEventos)
+
+        
+
+      }catch(e){
+         const error= new Error("fail");
+         error.statusCode=500;
+         error.data=errors.array()
+         throw error;     
+       }
+
+   }
+
+   exports.DeleteEvento = async (req,res,next)=>{
+      const  errors=validationResult(req);
+
+      if(!errors.isEmpty()){
+         error.statusCode=422;
+         error.data=errors.array();
+         throw error;
+      }
+
+      try{
+         
+         const EliminarEventos= await Evento.findByIdAndRemove({_id: req.body._id},function(err){
+
+            if(!err){
+               res.status(201).json({messege:"evento eliminado"});
+               console.log(EliminarEventos)
+
+            }else{
+               console.log("error"+err)
+            }
+         })
+
+         
+        
+
+      }catch(e){
+         const error= new Error("fail");
+         error.statusCode=500;
+         error.data=errors.array()
+         throw error;     
+       }
+
+   }
+
+   exports.PutEvento = async (req,res,next)=>{
+      const  errors=validationResult(req);
+
+      if(!errors.isEmpty()){
+         error.statusCode=422;
+         error.data=errors.array();
+         throw error;
+      }
+
+      try{
+
+         const actualizar=req.body;
+         
+         const ActaulizarEventos= await Evento.findByIdAndUpdate(req.body._id,actualizar,function(err){
+
+            if(!err){
+               res.status(201).json({messege:"evento actualizado"});
+               console.log(actualizar)
+
+            }else{
+               console.log("error"+err)
+            }
+         })
+
+         
+        
+
+      }catch(e){
+         const error= new Error("fail");
+         error.statusCode=500;
+         error.data=errors.array()
+         throw error;     
+       }
+
+   }

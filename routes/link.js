@@ -6,16 +6,22 @@ const operationes_contro =require("../controllers/reuniones")
 
 Route.post(
     "/evento",
-    [
-        
-        body("valueOne")
+    [  
+        body("id")
         .exists()
         .withMessage("EL VALOR DE ONE ES REQUERIDO")
-        .matches(/[0-9]+$/)   
+        .matches(/[0-9]+$/) 
+        .withMessage("EL VALOR DE tTWO DEBE SER NUMERICO")
+        .trim()
+        .escape(),
+        body("nombreEvento")
+        .exists()
+        .withMessage("EL VALOR DE ONE ES REQUERIDO")
+        .matches(/[a-z| ]+$/)   
         .withMessage("EL VALOR DE ONE DEBE SER NUMERICO")
         .trim()
         .escape(),
-        body("valueTwo")
+        body("cantidad")
         .exists()
         .withMessage("EL VALOR DE ONE ES REQUERIDO")
         .matches(/[0-9]+$/) 
@@ -23,4 +29,22 @@ Route.post(
         .trim()
         .escape(),
 
-    ],operationes_contro.even);
+    ],operationes_contro.evento);
+
+
+    Route.get(
+        "/evento",[
+
+        ],operationes_contro.getEvento);
+
+    Route.delete(
+        "/evento",[  
+    
+            ],operationes_contro.DeleteEvento);
+    
+    Route.put(
+    "/evento",[  
+            
+     ],operationes_contro.PutEvento); 
+
+    module.exports = Route;
