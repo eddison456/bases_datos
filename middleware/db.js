@@ -18,8 +18,11 @@ module.exports = ( )=>{
         (err)=>{
             if(err){
                 console.log(err+"error");
+
+                console.log("error mongo");
+
             }else{
-            console.log("conexion correcta")
+            console.log("conexion correcta mongo")
             }
              
          }
