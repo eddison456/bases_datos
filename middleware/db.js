@@ -17,7 +17,7 @@ module.exports = ( )=>{
 
         (err)=>{
             if(err){
-                console.log("error");
+                console.log(err+"error");
             }else{
             console.log("conexion correcta")
             }

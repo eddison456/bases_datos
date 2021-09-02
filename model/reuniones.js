@@ -15,6 +15,7 @@ const NewEvento= Schema(
         cantidad :{
             type: Number 
         },
+        comentarios:{type:String,nombreUsuario:String,comentario:String}
 
           
     }
