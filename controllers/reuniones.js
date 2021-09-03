@@ -5,6 +5,22 @@ const comentarios = require("../model/comentarios");
 const usuario=require("../model/usuarios");
 const asistentes=require("../model/asistentes")
 
+// actualizar evento despues o antes de asistente
+async function actualizarevento(_id,nombreEvento,cantidad){
+ 
+   console.log("entre a funcion bujajaj " + _id,nombreEvento,cantidad)
+   const ActaulizarEventos= await Evento.findByIdAndUpdate(_id,{_id,nombreEvento,cantidad},function(err){
+   if(!err){
+      console.log("entre x1 "+ _id)
+     
+   
+
+   }else{
+      console.log("error"+err)
+   }
+})     
+}
+
 // fuccones de agregar
  async  function addevento(req,res){
     console.log("entre a function", req.body)
@@ -528,21 +544,35 @@ exports.usuario = async  (req,res,next) =>{
           error.data=errors.array();
           throw error;
               }
-        try{
-         const arrayEventos= await Evento.find()
+      try{
+         const arrayEventos= await Evento.find({"_id":req.body._idevento});  
          const arrayusuarios= await usuario.find()
+
+         console.log("los datos de evento son : "+arrayEventos)
 
          const c = arrayEventos.map(function(arrayEventos) {
             const d = arrayusuarios.map(function(arrayusuarios){
               
+              
                if(req.body._idevento==arrayEventos._id){
                   if(req.body.correoUsuario==arrayusuarios.correoUsuario){
                      console.log("pase")
-                  const crearCoemntario=req.body.id;          
-              addAsistente(req,res)
+                  const crearCoemntario=req.body.id; 
+                  const actualizar=arrayEventos.cantidad;
+                 console.log(" cantida fase 1: "+actualizar )
+                  console.log(typeof(actualizar));
+                  const cantidad=actualizar-1;
+                  console.log(" cantida fase 2: "+cantidad)
+                  if(cantidad>0){
+                    
+                  actualizarevento(arrayEventos._id,arrayEventos.nombreEvento,cantidad)
+                  addAsistente(req,res)
+                  }else{
+                     res.status(201).json({messege:"no hay cupos en el evento"});
+   
                   }
                     
-               }})
+               }}})
            });
       
        }catch(e){
